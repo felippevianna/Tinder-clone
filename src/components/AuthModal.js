@@ -1,26 +1,38 @@
 import { useState } from 'react'
 
-const AuthModal = ({setShowModal}) => {
+const AuthModal = ({setShowModal, isSignUp}) => {
     const [email, setEmail] = useState(null)
     const [password, setPassword] = useState(null)
     const [confirmPassword, setConfirmPassword] = useState(null)
     const [error, setError] = useState(null)
+
+    console.log(email, password, confirmPassword)
     
     const handleClick = () => {
         setShowModal(false)
+        
     }
 
-    const isSignUp = true
+    
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        try{
+            if( isSignUp && (password !== confirmPassword )){
+                setError('Passwords needs to match')
+            }
+
+            console.log('make a post request to our database')
+        }catch(e){
+            console.log(e)
+        }
     }
 
     return (
         <div className="auth-modal">
             <div className="close-icon" onClick={handleClick}>X</div>
             <h2>{isSignUp ? 'CREATE ACCOUNT' : 'LOG IN'}</h2>
-            <p>By clicking log in, you agree to aour terms ...</p>
+            <p>By clicking log in, you agree to our terms ...</p>
             <form onSubmit={handleSubmit}>
                 <input 
                     type="email" 
@@ -28,7 +40,7 @@ const AuthModal = ({setShowModal}) => {
                     name="email" 
                     placeholder="email" 
                     required={true}  
-                    onChgange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value)}
                 />
                 <input 
                     type="password" 
@@ -36,18 +48,22 @@ const AuthModal = ({setShowModal}) => {
                     name="password" 
                     placeholder="password" 
                     required={true}  
-                    onChgange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => setPassword(e.target.value)}
                 />
-                <input 
-                    type="password-check" 
+                {isSignUp && <input 
+                    type="password" 
                     id="password-check" 
                     name="password-check" 
                     placeholder="confirm password" 
                     required={true}  
-                    onChgange={(e) => setConfirmPassword(e.target.value)}
-                />
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                />}
+                <input className="secondary-button" value="Submit" type="submit"/>
+                <p>{error}</p>
+
             </form>
-            Auth modal
+            <hr/>
+            <h2>GET THE APP</h2>
         </div>
     )
 }
